@@ -179,7 +179,7 @@ namespace SolutionsNamespace {
         Console.WriteLine(answer);
     }
 
-    public static bool IsValid(char[,] arr, int x, int y)
+    public static (bool, int, int) IsValid(char[,] arr, int x, int y)
 {
     int numRows = arr.GetLength(0);
     int numCols = arr.GetLength(1);
@@ -187,7 +187,7 @@ namespace SolutionsNamespace {
     // Check if the coordinates are within the bounds of the array
     if (x < 0 || x >= numRows || y < 0 || y >= numCols)
     {
-        return false;
+        return (false, -1, -1);
     }
 
     // Check the eight surrounding points (including diagonals)
@@ -207,12 +207,12 @@ namespace SolutionsNamespace {
                 // Check if the surrounding point is equal to '*'
                 if (arr[i, j] == '*')
                 {
-                    return true; // Return true if any surrounding point is '*'
+                    return (true, i, j); // Return true if any surrounding point is '*'
                 }
             }
         }
     }
-        return false; // Return false if none of the surrounding points are '*'
+        return (false, -1, -1); // Return false if none of the surrounding points are '*'
     }
 
     void day3part1 (){
@@ -242,7 +242,7 @@ namespace SolutionsNamespace {
                 for(int x=0; x<charArray.GetLength(0); x++){
                     if(Regex.IsMatch(charArray[x,y].ToString(), "[0-9]")){
                         Match match = Regex.Match(lines[x], "[0-9]");
-                        if(IsValid(charArray, x, y)){
+                        if(true){//IsValid(charArray, x, y)){
                             validCharArray[x,y] = charArray[x,y];
                         }
                         if(y-1 >= 0){
@@ -295,8 +295,103 @@ namespace SolutionsNamespace {
         Console.WriteLine(answerList.Sum());
     }
 
-    void day3part2 (){
+    struct tuplenumber {
+        public (int,int) index;
+        public char value;
+    }
 
+    void day3part2 (){
+         string[] lines = Shared.ReadInFile("InputFiles/day3.txt");
+        char[,] charArray = new char[lines.Count(), lines[0].Count()];
+        tuplenumber[,] validCharArray = new tuplenumber[lines.Count(), lines[0].Count()];
+        int i = 0;
+
+        foreach (var line in lines){
+            for(int j=0; j<line.Count(); j++){
+                charArray[i,j]  =line.ElementAt(j);
+                validCharArray[i,j].value = '.';
+                validCharArray[i,j].index = (-1,-1);
+            }
+            i+=1;
+        }
+
+        for(int y=0; y<charArray.GetLength(1); y++){
+            for(int x=0; x<charArray.GetLength(0); x++){
+                if(Regex.IsMatch(charArray[x,y].ToString(), "[^.0-9]")){
+                    charArray[x,y] = '*'; 
+                }
+            }
+        }
+        for(int iter=0; iter<5; iter++){
+            for(int y=0; y<charArray.GetLength(1); y++){
+                for(int x=0; x<charArray.GetLength(0); x++){
+                    if(Regex.IsMatch(charArray[x,y].ToString(), "[0-9]")){
+                        Match match = Regex.Match(lines[x], "[0-9]");
+                        if(IsValid(charArray, x, y).Item1){
+                            validCharArray[x,y].value = charArray[x,y];
+                            validCharArray[x,y].index = (IsValid(charArray, x, y).Item2, IsValid(charArray, x, y).Item3);
+                        }
+                        if(y-1 >= 0){
+                            if(validCharArray[x, y-1].value != '.'){
+                                validCharArray[x,y].value = charArray[x,y];
+                                validCharArray[x,y].index = validCharArray[x, y-1].index;
+                            }
+                        }
+                        if(y+1 < charArray.GetLength(1)-1){
+                            if(validCharArray[x, y+1].value != '.'){
+                                validCharArray[x,y].value = charArray[x,y];
+                                validCharArray[x,y].index = validCharArray[x, y+1].index;
+                            }
+                        }
+                    }
+                }
+            }   
+        }
+
+        List<int> answerList = new();
+        List<(int,int)> gears = new();
+        Dictionary<(int,int),int> tupleIntDic = new();
+        string num = "";
+        for(int iter = 0; iter<validCharArray.GetLength(0); iter+=1){
+            int index = 0;
+            while(index < validCharArray.GetLength(1)){
+                num = "";
+                if(validCharArray[iter,index].value != '.'){
+                    while(index < validCharArray.GetLength(1) && validCharArray[iter,index].value!= '.'){
+                        num += validCharArray[iter,index].value;
+                        index += 1;
+                    }
+                    Console.WriteLine(num);
+                    if(!tupleIntDic.ContainsKey(validCharArray[iter,index-1].index)){
+                        tupleIntDic.Add(validCharArray[iter,index-1].index, int.Parse(num));
+                    }
+                    else{
+                        tupleIntDic[validCharArray[iter,index-1].index] = tupleIntDic[validCharArray[iter,index-1].index] * int.Parse(num);
+                        gears.Add(validCharArray[iter,index-1].index);
+                    }
+                }
+                
+                index += 1;            
+            }
+        }
+
+        foreach(var kvp in tupleIntDic){
+            Console.WriteLine($"Key: {kvp.Key}, Value: {kvp.Value}");
+        }
+
+        int sum = 0;
+
+        foreach (var key in tupleIntDic.Keys)
+        {
+            if (key.Item1 is int && key.Item2 is int)
+            {
+                if(gears.Contains(key)){
+                    sum += tupleIntDic[key];
+                }
+            }
+        }
+
+        Console.WriteLine(sum);
     }
 
     class Program
@@ -311,7 +406,8 @@ namespace SolutionsNamespace {
             //mySC.day1part2();
             //mySC.day2part1();
             //mySC.day2part2();
-            mySC.day3part1();
+            //mySC.day3part1();
+            mySC.day3part2();
         }
     }
 }
