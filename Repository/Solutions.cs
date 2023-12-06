@@ -295,7 +295,7 @@ namespace SolutionsNamespace {
         Console.WriteLine(answerList.Sum());
     }
 
-    struct tuplenumber {
+    struct tupleNumber {
         public (int,int) index;
         public char value;
     }
@@ -303,7 +303,7 @@ namespace SolutionsNamespace {
     public void day3part2 (){
          string[] lines = Shared.ReadInFile("InputFiles/day3.txt");
         char[,] charArray = new char[lines.Count(), lines[0].Count()];
-        tuplenumber[,] validCharArray = new tuplenumber[lines.Count(), lines[0].Count()];
+        tupleNumber[,] validCharArray = new tupleNumber[lines.Count(), lines[0].Count()];
         int i = 0;
 
         foreach (var line in lines){
@@ -383,15 +383,21 @@ namespace SolutionsNamespace {
 
         foreach (var key in tupleIntDic.Keys)
         {
-            if (key.Item1 is int && key.Item2 is int)
-            {
                 if(gears.Contains(key)){
                     sum += tupleIntDic[key];
                 }
-            }
         }
 
         Console.WriteLine(sum);
     }
+
+    public void day4part1(){
+
+    }
+
+    public void day4part2(){
+
+    }
+
     }
 }

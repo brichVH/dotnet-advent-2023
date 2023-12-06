@@ -17,5 +17,7 @@ class Program
         //mySC.day2part2();
         //mySC.day3part1();
         //mySC.day3part2();
+
+        mySC.day4part1();
     }
 }
