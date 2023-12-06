@@ -392,11 +392,68 @@ namespace SolutionsNamespace {
     }
 
     public void day4part1(){
+        string[] lines = Shared.ReadInFile("InputFiles/day4.txt");
+        
+        double answer = 0;
+        
+        foreach (var line in lines){
+            string[] leftList;
+            string[] rightList;
+            string tempLine = "";
 
+            var colon = line.IndexOf(":")+2;
+            tempLine = line.Substring(colon)
+                        .Replace("  ", " ")
+                        .Trim();
+            var games = tempLine.Split("|");
+            leftList = games[0].Trim().Split(" ");
+            rightList = games[1].Trim().Split(" ");
+
+            var intersect = leftList.Intersect(rightList);
+
+            if(intersect.Count() > 0 ){
+               answer +=  Math.Pow(2, intersect.Count()-1);
+            }
+        }
+        Console.WriteLine(answer);
     }
 
     public void day4part2(){
+        string[] lines = Shared.ReadInFile("InputFiles/day4.txt");
+        Dictionary<int,int> intDic = new Dictionary<int, int>();
 
+        for(int i=1; i<= lines.Length; i++){
+            intDic[i] = 1;
+        }
+        
+        int index = 1;
+
+        foreach (var line in lines){
+            string[] leftList;
+            string[] rightList;
+            string tempLine = "";
+
+                var colon = line.IndexOf(":")+2;
+                tempLine = line.Substring(colon)
+                            .Replace("  ", " ")
+                            .Trim();
+                var games = tempLine.Split("|");
+                leftList = games[0].Trim().Split(" ");
+                rightList = games[1].Trim().Split(" ");
+
+            var intersect = leftList.Intersect(rightList);
+
+            for (int i=1; i<=intersect.Count(); i++){
+                intDic[i+index]+=intDic[index];
+            }
+            index += 1;
+        }
+
+        foreach(var kvp in intDic){
+            Console.WriteLine(kvp);
+        }
+
+        Console.WriteLine(intDic.Values.Sum());
     }
 
     }
