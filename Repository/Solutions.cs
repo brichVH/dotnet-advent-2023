@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using AdventOfCode;
@@ -456,5 +457,94 @@ namespace SolutionsNamespace {
         Console.WriteLine(intDic.Values.Sum());
     }
 
+    public void day5part1(){
+
     }
+
+    public void day5part2(){
+
+    }
+
+    public void day6part1(){
+        string[] lines = Shared.ReadInFile("InputFiles/test.txt");
+        List<string> times = lines[0].Substring(lines[0].IndexOf(":")+1)
+                            .Trim()
+                            .Replace(" ", " ")
+                            .Split(" ")
+                            .ToList();
+        List<string> distances = lines[1].Substring(lines[1].IndexOf(":")+1)
+                            .Trim()
+                            .Replace(" ", " ")
+                            .Split(" ")
+                            .ToList();
+        int answer = 1;
+        var count = 0;
+
+        for (int i=0; i<times.Count(); i++){
+            count = 0;
+            var time_limit = int.Parse(times[i]);
+            var distance = int.Parse(distances[i]);
+            for(int j=0; j<int.Parse(times[i]); j++){
+                if((time_limit-j)*j > distance){
+                    count++;
+                }
+            }
+            answer = answer * count;
+        }
+
+        Console.WriteLine(answer);
+    }
+
+    public void day6part2(){
+        string[] lines = Shared.ReadInFile("InputFiles/day6.txt");
+        List<string> times = lines[0].Substring(lines[0].IndexOf(":")+1)
+                            .Trim()
+                            .Replace(" ", "")
+                            .Split(" ")
+                            .ToList();
+        List<string> distances = lines[1].Substring(lines[1].IndexOf(":")+1)
+                            .Trim()
+                            .Replace(" ", "")
+                            .Split(" ")
+                            .ToList();
+        int answer = 1;
+        var count = 0;
+
+        Shared.PrintCollection(times);
+        Shared.PrintCollection(distances);
+
+        for (int i=0; i<times.Count(); i++){
+            count = 0;
+            var time_limit = int.Parse(times[i]);
+            var distance = BigInteger.Parse(distances[i]);
+            for(BigInteger j=0; j<BigInteger.Parse(times[i]); j++){
+                if((time_limit-j)*j > distance){
+                    count++;
+                }
+            }
+            answer = answer * count;
+        }
+
+        Console.WriteLine(answer);
+    }
+
+    public void day7part1(){
+
+    }
+
+
+    public void day7part2(){
+        
+    }
+
+    public void day9part1(){
+        Console.WriteLine("hello\n");
+    }
+
+    public void day9part2(){
+        
+    }
+        
+    }
+
 }

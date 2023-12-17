@@ -18,6 +18,11 @@ class Program
         //mySC.day3part1();
         //mySC.day3part2();
         //mySC.day4part1();
-        mySC.day4part2();
+        //mySC.day4part2();
+        //mySC.day6part1();
+        //mySC.day6part2();
+        //mySC.day7part1();
+
+        mySC.day9part1();
     }
 }
