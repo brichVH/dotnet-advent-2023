@@ -23,6 +23,6 @@ class Program
         //mySC.day6part2();
         //mySC.day7part1();
 
-        mySC.day9part1();
+        mySC.day8part2();
     }
 }

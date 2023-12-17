@@ -3,6 +3,8 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using AdventOfCode;
+using MathNet.Numerics;
+using System;
 
 namespace SolutionsNamespace {
     public class SolutionsClass {
@@ -537,12 +539,80 @@ namespace SolutionsNamespace {
         
     }
 
-    public void day9part1(){
-        Console.WriteLine("hello\n");
+    public struct Node {
+        public string left;
+        public string right;
     }
 
-    public void day9part2(){
-        
+    public int tree_trav_rec(Dictionary<string, Node> nodeDic, string directions, string curr_node, int count){
+        int count_trunc = count % directions.Length;
+        if(curr_node[2] == 'Z'){
+            return count;
+        }
+        else if (directions[count_trunc] == 'L'){
+            return tree_trav_rec(nodeDic, directions, nodeDic[curr_node].left, count+1);
+        }
+        else{
+            return tree_trav_rec(nodeDic, directions, nodeDic[curr_node].right, count+1);
+        }
+    }
+
+    public void day8part1(){
+        string[] lines = Shared.ReadInFile("InputFiles/day8.txt");
+
+        Dictionary<string, Node> nodeDictionary = new Dictionary<string, Node>();
+
+        string order = lines[0];
+
+        for(int i=2; i<lines.Count(); i+=1){
+            string name = lines[i].Substring(0,3);
+            string left = lines[i].Substring(7,3);
+            string right = lines[i].Substring(12,3);
+
+            Node TempNode = new Node();
+            TempNode.right = right;
+            TempNode.left = left;
+
+            nodeDictionary[name] = TempNode;
+        }
+
+        //tree_trav_rec(Dictionary<string, Node> nodeDic, string directions, [string] curr_node, int count){
+        var x = tree_trav_rec(nodeDictionary, order, "AAA", 0);
+
+        Console.WriteLine(x);
+    }
+
+    public void day8part2(){
+        string[] lines = Shared.ReadInFile("InputFiles/day8.txt");
+
+        Dictionary<string, Node> nodeDictionary = new Dictionary<string, Node>();
+
+        string order = lines[0];
+
+        for(int i=2; i<lines.Count(); i+=1){
+            string name = lines[i].Substring(0,3);
+            string left = lines[i].Substring(7,3);
+            string right = lines[i].Substring(12,3);
+
+            Node TempNode = new Node();
+            TempNode.right = right;
+            TempNode.left = left;
+
+            nodeDictionary[name] = TempNode;
+        }
+
+        List<long> startingNodes = new();
+
+        foreach (var node in nodeDictionary.Keys){
+            if(node[2] == 'A'){
+                startingNodes.Add((long)tree_trav_rec(nodeDictionary, order, node, 0));
+            }
+        }
+
+        Shared.PrintCollection(startingNodes);
+        long lcmResult = Euclid.LeastCommonMultiple(startingNodes.ToList());
+
+        Console.WriteLine($"answer :{lcmResult}");
     }
         
     }
